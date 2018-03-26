@@ -7,7 +7,11 @@
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
+import java.util.Random;
+import java.util.concurrent.ThreadLocalRandom;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -18,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author ice
  */
-@WebServlet(urlPatterns = {"/frutas.html","/alfabetica.html","/numeroletras.html"})
+@WebServlet(urlPatterns = {"/frutas.html", "/alfabetica.html", "/numeroletras.html"})
 public class ListaFrutasServlet extends HttpServlet {
 
     private List<String> frutas = new ArrayList<String>() {
@@ -66,16 +70,17 @@ public class ListaFrutasServlet extends HttpServlet {
 
             if (request.getServletPath().equals("/alfabetica.html")) {
                 java.util.Collections.sort(frutas);
-                
+
                 for (int i = 0; i < frutas.size(); i++) {
                     out.println("<li>" + frutas.get(i) + "</li>");
                 }
             } else if (request.getServletPath().equals("/numeroletras.html")) {
-                
                 for (int i = 0; i < frutas.size(); i++) {
                     out.println("<li>" + frutas.get(i) + "</li>");
                 }
             } else if (request.getServletPath().equals("/frutas.html")) {
+                ordenarAleatorio(frutas);
+
                 for (int i = 0; i < frutas.size(); i++) {
                     out.println("<li>" + frutas.get(i) + "</li>");
                 }
@@ -101,4 +106,14 @@ public class ListaFrutasServlet extends HttpServlet {
         return "Short description";
     }// </editor-fold>
 
+    private static void ordenarAleatorio(List<String> array) {
+        Random rnd = ThreadLocalRandom.current();
+        for (int i = array.size() - 1; i > 0; i--) {
+            int index = rnd.nextInt(i + 1);
+
+            String aux = array.get(index);
+            array.set(index, array.get(i));
+            array.set(i, aux);
+        }
+    }
 }
