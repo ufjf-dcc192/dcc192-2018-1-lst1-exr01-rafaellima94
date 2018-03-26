@@ -18,17 +18,17 @@ import javax.servlet.http.HttpServletResponse;
  *
  * @author ice
  */
-@WebServlet(urlPatterns = {"/ListaFrutasServlet"})
+@WebServlet(urlPatterns = {"/frutas.html","/alfabetica.html","/numeroletras.html"})
 public class ListaFrutasServlet extends HttpServlet {
 
     private List<String> frutas = new ArrayList<String>() {
         {
-           add("Banana");
-           add("Maça");
-           add("Uva");
-           add("Melancia");
-           add("Laranja");
-           add("Limão");
+            add("Banana");
+            add("Maça");
+            add("Uva");
+            add("Melancia");
+            add("Laranja");
+            add("Limão");
         }
     };
 
@@ -49,40 +49,53 @@ public class ListaFrutasServlet extends HttpServlet {
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        response.setContentType("text/html;charset=UTF-8");
+        try (PrintWriter out = response.getWriter()) {
+            /* TODO output your page here. You may use following sample code. */
+            out.println("<!DOCTYPE html>");
+            out.println("<html>");
+            out.println("<head>");
+            out.println("<title>Servlet ListaFrutasServlet</title>");
+            out.println("</head>");
+            out.println("<body>");
+            out.println("<h1>Lista de Frutas:</h1>");
+            out.println("<ul>");
+
+            if (request.getServletPath().equals("/alfabetica.html")) {
+                java.util.Collections.sort(frutas);
+                
+                for (int i = 0; i < frutas.size(); i++) {
+                    out.println("<li>" + frutas.get(i) + "</li>");
+                }
+            } else if (request.getServletPath().equals("/numeroletras.html")) {
+                
+                for (int i = 0; i < frutas.size(); i++) {
+                    out.println("<li>" + frutas.get(i) + "</li>");
+                }
+            } else if (request.getServletPath().equals("/frutas.html")) {
+                for (int i = 0; i < frutas.size(); i++) {
+                    out.println("<li>" + frutas.get(i) + "</li>");
+                }
+            }
+
+            out.println("</ul>");
+            out.println("<a href='alfabetica.html'>Ordem Alfabética</a>");
+            out.println("<a href='numeroletras.html'>Número de Letras</a>");
+            out.println("<a href='frutas.html'>Aleatório</a>");
+            out.println("</body>");
+            out.println("</html>");
+        }
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         processRequest(request, response);
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
     public String getServletInfo() {
         return "Short description";
