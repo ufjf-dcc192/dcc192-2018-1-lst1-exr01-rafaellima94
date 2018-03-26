@@ -75,8 +75,22 @@ public class ListaFrutasServlet extends HttpServlet {
                     out.println("<li>" + frutas.get(i) + "</li>");
                 }
             } else if (request.getServletPath().equals("/numeroletras.html")) {
-                for (int i = 0; i < frutas.size(); i++) {
-                    out.println("<li>" + frutas.get(i) + "</li>");
+                List<String> aux = new ArrayList<String>(frutas);
+                
+                while (!aux.isEmpty()) {
+                    String maior = "";
+                    
+                    for (String auxString : aux) {
+                        if (auxString.length() > maior.length()) {
+                            maior = auxString;
+                        }
+                    }
+                    
+                    out.println("<li>" + maior + "</li>");
+                    
+                    while (aux.contains(maior)) {
+                        aux.remove(maior);
+                    }
                 }
             } else if (request.getServletPath().equals("/frutas.html")) {
                 ordenarAleatorio(frutas);
@@ -108,6 +122,7 @@ public class ListaFrutasServlet extends HttpServlet {
 
     private static void ordenarAleatorio(List<String> array) {
         Random rnd = ThreadLocalRandom.current();
+
         for (int i = array.size() - 1; i > 0; i--) {
             int index = rnd.nextInt(i + 1);
 
